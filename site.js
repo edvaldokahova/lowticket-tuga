@@ -23,13 +23,19 @@
     fbq('init', C.pixel); fbq('track','PageView');
     var ev = document.body.getAttribute('data-event'); if (ev) fbq('track', ev);
   }
+  function utmify(){
+    if (!document.body.hasAttribute('data-utmify') || window.__utmifyLoaded) return;
+    window.__utmifyLoaded = true;
+    var s = document.createElement('script'); s.src = 'utmify.js'; document.head.appendChild(s);
+  }
+  function medir(){ pixel(); utmify(); }
   var choice = null; try { choice = localStorage.getItem('atpt_cookies'); } catch(e){}
-  if (choice === 'sim') pixel();
-  else if (choice !== 'nao' && C.pixel) {
+  if (choice === 'sim') medir();
+  else if (choice !== 'nao' && (C.pixel || document.body.hasAttribute('data-utmify'))) {
     var b = document.createElement('div'); b.className = 'cookie'; b.setAttribute('role','dialog');
-    b.innerHTML = '<p>Usamos cookies de medição (Meta) para saber que anúncios funcionam. Só os ativamos se aceitares. <a href="privacidade.html">Saber mais</a></p><div><button class="n" type="button">Recusar</button><button class="y" type="button">Aceitar</button></div>';
+    b.innerHTML = '<p>Usamos cookies de medição (Meta e Utmify) para saber que anúncios funcionam. Só os ativamos se aceitares. <a href="privacidade.html">Saber mais</a></p><div><button class="n" type="button">Recusar</button><button class="y" type="button">Aceitar</button></div>';
     document.body.appendChild(b);
-    function set(v){ try{ localStorage.setItem('atpt_cookies', v); }catch(e){} b.remove(); if (v==='sim') pixel(); }
+    function set(v){ try{ localStorage.setItem('atpt_cookies', v); }catch(e){} b.remove(); if (v==='sim') medir(); }
     b.querySelector('.y').onclick = function(){ set('sim'); };
     b.querySelector('.n').onclick = function(){ set('nao'); };
   }
