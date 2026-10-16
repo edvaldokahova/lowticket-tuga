@@ -15,6 +15,8 @@
     else if (k === 'whatsapp') { el.textContent = '+' + v; if (el.tagName === 'A') el.href = 'https://wa.me/' + v; }
     else el.textContent = v;
   });
+  var vf=document.getElementById('vsl'),vv=document.getElementById('vslVideo'),vb=document.getElementById('vslPlay');
+  if (vf&&vv&&vb){ vb.addEventListener('click',function(){ vf.classList.add('on'); vv.controls=true; vv.play(); try{ if(window.fbq) fbq('trackCustom','VSLPlay'); }catch(e){} }); }
   var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
   // cookies + Meta Pixel (só com consentimento)
   function pixel(){
